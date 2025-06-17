@@ -30,7 +30,8 @@ export class StreamReader {
   private async ensureBufferFilledToAtLeast(
     count: number | bigint,
   ): Promise<void> {
-    while (this.buffer.length - this.bufferOffset < count) {
+    const countNum = Number(count);
+    while (this.buffer.length - this.bufferOffset < countNum) {
       const { done, value } = await this.reader.read();
       if (done) {
         throw new Error("Unexpected end of stream");
@@ -45,7 +46,7 @@ export class StreamReader {
   }
 
   async read(len: number | bigint): Promise<Uint8Array> {
-    const offset = len.valueOf() as number;
+    const offset = Number(len);
     await this.ensureBufferFilledToAtLeast(offset);
 
     const value = this.buffer.slice(
@@ -60,7 +61,7 @@ export class StreamReader {
   }
 
   async readString(len: number | bigint): Promise<string> {
-    const data = await this.read(len);
+    const data = await this.read(Number(len));
     const textDecoder = new TextDecoder();
     return textDecoder.decode(data);
   }
@@ -138,6 +139,10 @@ export class StreamReader {
       buffer.set(chunk, offset);
       offset += chunk.length;
     }
+
+    // Update bytesRead to reflect the total bytes consumed
+    this.bytesRead += length;
+    this.bufferOffset = this.buffer.length;
 
     return buffer;
   }
@@ -219,6 +224,6 @@ export class StreamWriter {
   }
 
   async close(): Promise<void> {
-    await this.writer.close();
+    return await this.writer.close();
   }
 }

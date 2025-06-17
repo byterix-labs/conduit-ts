@@ -22,7 +22,9 @@
     "lint:fix": "eslint src/ index.ts --fix",
     "format": "prettier --write src/ index.ts",
     "typecheck": "tsc --noEmit",
-    "test": "bun run example.ts",
+    "test": "bun test",
+    "test:watch": "bun test --watch",
+    "test:coverage": "bun test --coverage",
     "example": "bun run example.ts"
   },
   "keywords": [
@@ -36,6 +38,7 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@types/bun": "^1.2.16",
     "@typescript-eslint/eslint-plugin": "^8.32.1",
     "@typescript-eslint/parser": "^8.32.1",
     "eslint": "^9.26.0",
