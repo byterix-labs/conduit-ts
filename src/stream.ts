@@ -6,11 +6,11 @@ export enum Endian {
 }
 
 export class StreamReader {
-  bytesRead: number = 0;
-
   private readonly reader: ReadableStreamDefaultReader<Uint8Array>;
   private buffer: Uint8Array = new Uint8Array(0); // Internal buffer
   private bufferOffset: number = 0; // Offset within the buffer
+
+  public bytesRead: number = 0;
 
   constructor(public stream: ReadableStream<Uint8Array>) {
     this.reader = stream.getReader();
@@ -45,6 +45,14 @@ export class StreamReader {
     }
   }
 
+  private trimBuffer() {
+    // once we've consumed half the buffer, drop the used part
+    if (this.bufferOffset > this.buffer.byteLength >>> 1) {
+      this.buffer = this.buffer.slice(this.bufferOffset);
+      this.bufferOffset = 0;
+    }
+  }
+
   async read(len: number | bigint): Promise<Uint8Array> {
     const offset = Number(len);
     await this.ensureBufferFilledToAtLeast(offset);
@@ -56,6 +64,8 @@ export class StreamReader {
 
     this.bufferOffset += offset;
     this.bytesRead += offset;
+
+    this.trimBuffer();
 
     return value;
   }
@@ -75,34 +85,56 @@ export class StreamReader {
     return new DataView(data.buffer);
   }
 
+  toSignedNumber(u: number, bits: number): number {
+    if (u < 0) {
+      throw new RangeError("Value must be positive");
+    }
+
+    const mask = (1 << bits) - 1;
+    const shift = 32 - bits;
+    // mask off low N bits, shift left to sign‐bit, then arithmetic-shift back
+    return ((u & mask) << shift) >> shift;
+  }
+
+  bufferToUnsignedNumber(buffer: Uint8Array, endian: Endian): number {
+    let result = 0;
+
+    if (endian === Endian.Little) {
+      for (let i = 0; i < buffer.length; i++) {
+        result |= buffer[i] << (i * 8);
+      }
+    } else {
+      for (let i = 0; i < buffer.length; i++) {
+        result = (result << 8) | buffer[i];
+      }
+    }
+
+    return result >>> 0;
+  }
+
   async readInt8(): Promise<number> {
     const buffer = await this.read(1);
-    const dataView = this.createDataView(buffer);
-    return dataView.getInt8(0);
+    return this.toSignedNumber(buffer[0], 8);
   }
 
   async readUint16(endian: Endian = Endian.Big): Promise<number> {
     const buffer = await this.read(2);
-    const dataView = this.createDataView(buffer);
-    return dataView.getUint16(0, endian === Endian.Little);
+    return this.bufferToUnsignedNumber(buffer, endian);
   }
 
   async readInt16(endian: Endian = Endian.Big): Promise<number> {
     const buffer = await this.read(2);
-    const dataView = this.createDataView(buffer);
-    return dataView.getInt16(0, endian === Endian.Little);
+    const unsigned = this.bufferToUnsignedNumber(buffer, endian);
+    return this.toSignedNumber(unsigned, 16);
   }
 
   async readUint32(endian: Endian = Endian.Big): Promise<number> {
     const buffer = await this.read(4);
-    const dataView = this.createDataView(buffer);
-    return dataView.getUint32(0, endian === Endian.Little);
+    return this.bufferToUnsignedNumber(buffer, endian);
   }
 
   async readInt32(endian: Endian = Endian.Big): Promise<number> {
-    const buffer = await this.read(4);
-    const dataView = this.createDataView(buffer);
-    return dataView.getInt32(0, endian === Endian.Little);
+    return (await this.readUint32(endian)) | 0;
   }
 
   async readUint64(endian: Endian = Endian.Big): Promise<bigint> {
@@ -117,7 +149,7 @@ export class StreamReader {
     return dataView.getBigInt64(0, endian === Endian.Little);
   }
 
-  async readUntilEof(): Promise<Uint8Array<ArrayBufferLike>> {
+  async readUntilEof(): Promise<Uint8Array> {
     const chunks: Uint8Array[] = [this.buffer.slice(this.bufferOffset)];
 
     let done = false;
@@ -146,9 +178,6 @@ export class StreamReader {
 
     return buffer;
   }
-
-  // Optional: Implement seek if needed (complex with streams)
-  // async seek(offset: number, whence: SeekOrigin): Promise<number> { ... }
 
   async close(): Promise<void> {
     this.reader.releaseLock();
