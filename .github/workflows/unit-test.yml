@@ -1,0 +1,41 @@
+name: Unit Test
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install bun
+        uses: jdx/mise-action@v2
+        with:
+          cache: true
+          experimental: true
+          mise_toml: |
+            [settings.npm]
+            bun = true
+
+            [tools]
+            bun = "latest"
+            "npm:github-actions-ctrf" = "latest"
+            "npm:junit-to-ctrf" = "latest"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - run: bun install
+      - run: |
+          bun test \
+            --coverage \
+            --coverage-reporter text \
+            --reporter-outfile test_results.xml \
+            --reporter junit
+
+      - name: Report Test Results
+        run: |
+          junit-to-ctrf test_results.xml -o ctrf/test_results.json
+          github-actions-ctrf ctrf/*.json
+        if: always()
