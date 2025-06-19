@@ -17,7 +17,7 @@
     "example.ts"
   ],
   "scripts": {
-    "build": "tsc --noEmit",
+    "build": "tsc --noEmit && bun run build.ts",
     "lint": "eslint src/ index.ts",
     "lint:fix": "eslint src/ index.ts --fix",
     "format": "prettier --write src/ index.ts",
