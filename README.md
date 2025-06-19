@@ -1,6 +1,6 @@
 # conduit-ts
 
-A TypeScript streaming library providing `StreamReader` and `StreamWriter` classes for efficient binary data processing. Inspired by the `Reader` and `Writer` interfaces from [Zig](https://ziglang.org]
+A TypeScript streaming library providing `StreamReader` and `StreamWriter` classes for efficient binary data processing. Inspired by the `Reader` and `Writer` interfaces from [Zig](https://ziglang.org)
 
 ## Features
 
