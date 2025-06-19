@@ -39,9 +39,24 @@ Performance comparison on **MacBook Pro (M1 Pro, 32GB RAM)** using Playwright (C
 
 ## Installation
 
+Install directly from GitHub:
+
 ```bash
-npm install conduit-ts
+# Using npm
+npm install github:username/conduit-ts
+
+# Using yarn
+yarn add github:username/conduit-ts
+
+# Using pnpm
+pnpm add github:username/conduit-ts
+
+# Using bun
+bun add github:username/conduit-ts
 ```
+
+**Requirements:**
+- TypeScript-compatible runtime (Bun, Deno) or bundler (Vite, Webpack, etc.)
 
 ## Usage
 
@@ -153,6 +168,10 @@ enum Endian {
 
 - `uint8ArrayFromBufferSource(bufferSource: BufferSource): Uint8Array` - Convert BufferSource to Uint8Array
 - `toBase64(data: BufferSource): string` - Convert binary data to base64 string
+
+## TODO
+
+- [ ] Publish package to npmjs
 
 ## License
 
