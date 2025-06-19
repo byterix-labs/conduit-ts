@@ -10,6 +10,33 @@ A TypeScript streaming library providing `StreamReader` and `StreamWriter` class
 - **Buffer Management**: Efficient internal buffering for optimal performance
 - **Type Safety**: Full TypeScript support with proper type definitions
 
+## Performance
+
+The library includes multiple `ValueReader` implementations optimized for different scenarios:
+
+- **BitOpsValueReader**: Uses bit manipulation operations
+- **DataViewValueReader**: Uses JavaScript's built-in DataView
+- **PerformanceValueReader**: Hybrid approach using BitOps for 8-16 bit values and DataView for 32-64 bit values (used as DefaultValueReader)
+
+### Benchmark Results
+
+Performance comparison on **MacBook Pro (M1 Pro, 32GB RAM)** using Playwright (Chromium & Firefox):
+
+| Operation | BitOps (ms) | DataView (ms) | Performance (ms) | Winner |
+|-----------|-------------|---------------|------------------|---------|
+| Int8 (1M iterations) | 8.18 | 34.29 | **7.85** | PerformanceValueReader |
+| Int16 BE (500K iterations) | 12.43 | 20.44 | **11.13** | PerformanceValueReader |
+| Int32 BE (200K iterations) | 16.63 | **15.11** | **15.16** | DataView (tied) |
+| Uint64 BE (20K iterations) | 10.03 | 2.63 | **1.63** | PerformanceValueReader |
+| Int64 BE (20K iterations) | 8.96 | 1.74 | **1.61** | PerformanceValueReader |
+
+**Key Takeaways:**
+- `PerformanceValueReader` provides the best overall performance across all data types
+- For 8-16 bit operations, bit manipulation is significantly faster than DataView
+- For 64-bit operations, the hybrid approach outperforms even pure DataView by ~40%
+- `PerformanceValueReader` is used as the `DefaultValueReader` throughout the library
+- Results are consistent across both Chromium and Firefox browsers
+
 ## Installation
 
 ```bash
