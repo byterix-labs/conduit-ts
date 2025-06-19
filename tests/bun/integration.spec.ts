@@ -1,5 +1,5 @@
 import { describe, test, expect } from "bun:test";
-import { StreamReader, StreamWriter, Endian } from "../index";
+import { StreamReader, StreamWriter, Endian } from "../../index";
 
 describe("Integration Tests - Round-trip Read/Write", () => {
   async function createWriterAndCollectData(): Promise<{

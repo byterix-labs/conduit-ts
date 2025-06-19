@@ -25,7 +25,11 @@
     "test": "bun test",
     "test:watch": "bun test --watch",
     "test:coverage": "bun test --coverage",
-    "example": "bun run example.ts"
+    "pw:install": "bunx playwright install",
+    "test:pw": "bunx playwright test",
+    "example": "bun run example.ts",
+    "pw:serve": "bun dist/index.html --port=3000",
+    "prepw:serve": "bun run build"
   },
   "keywords": [
     "stream",
@@ -38,11 +42,13 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@playwright/test": "^1.53.1",
     "@types/bun": "^1.2.16",
     "@typescript-eslint/eslint-plugin": "^8.32.1",
     "@typescript-eslint/parser": "^8.32.1",
     "eslint": "^9.26.0",
     "eslint-config-prettier": "^10.1.5",
+    "playwright": "^1.53.1",
     "prettier": "^3.5.3",
     "typescript": "^5.7.3"
   },

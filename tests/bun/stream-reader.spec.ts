@@ -1,5 +1,5 @@
 import { describe, test, expect } from "bun:test";
-import { StreamReader, Endian } from "../index";
+import { StreamReader, Endian } from "../../index";
 
 describe("StreamReader", () => {
   describe("construction", () => {

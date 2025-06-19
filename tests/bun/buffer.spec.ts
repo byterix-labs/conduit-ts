@@ -1,5 +1,5 @@
 import { describe, test, expect } from "bun:test";
-import { uint8ArrayFromBufferSource, toBase64 } from "../index";
+import { uint8ArrayFromBufferSource, toBase64 } from "../../index";
 
 describe("Buffer utilities", () => {
   describe("uint8ArrayFromBufferSource", () => {
