@@ -1,4 +1,4 @@
-import { PerformanceValueReader } from "./PerformanceValueReader";
+import PerformanceValueReader from "./PerformanceValueReader";
 
 const DefaultValueReader = PerformanceValueReader;
 

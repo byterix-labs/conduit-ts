@@ -8,7 +8,7 @@ import DataViewValueReader from "./DataViewValueReader";
  *
  * This provides the best performance.
  */
-export class PerformanceValueReader implements ValueReader {
+export default class PerformanceValueReader implements ValueReader {
   private readonly br = new BitOpsValueReader();
   private readonly dv = new DataViewValueReader();
 

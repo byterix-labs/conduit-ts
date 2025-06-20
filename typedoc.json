@@ -1,0 +1,44 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": ["./index.ts"],
+  "out": "./docs",
+  "name": "conduit-ts",
+  "readme": "./README.md",
+  "includeVersion": true,
+  "excludePrivate": true,
+  "excludeProtected": true,
+  "excludeExternals": true,
+  "excludeInternal": true,
+  "disableSources": false,
+  "sourceLinkTemplate": "https://github.com/byterix-labs/conduit-ts/blob/{gitRevision}/{path}#L{line}",
+  "gitRevision": "main",
+  "theme": "default",
+  "lightHighlightTheme": "light-plus",
+  "navigation": {
+    "includeCategories": true,
+    "includeGroups": true,
+    "excludeReferences": true
+  },
+  "categorizeByGroup": false,
+  "defaultCategory": "Other",
+  "categoryOrder": [
+    "Classes",
+    "Interfaces",
+    "Type Aliases",
+    "Functions",
+    "Variables",
+    "*"
+  ],
+  "searchInComments": true,
+  "cleanOutputDir": true,
+  "titleLink": "https://byterix-labs.github.io/conduit-ts/",
+  "navigationLinks": {
+    "GitHub": "https://github.com/byterix-labs/conduit-ts"
+  },
+  "hostedBaseUrl": "https://byterix-labs.github.io/conduit-ts/",
+  "hideGenerator": false,
+  "markdownItOptions": {
+    "html": true,
+    "linkify": true
+  }
+}

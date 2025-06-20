@@ -155,20 +155,6 @@ await writer.close();
 #### Methods
 - `close(): Promise<void>` - Close the writer and flush any pending data
 
-### Endian Enum
-
-```typescript
-enum Endian {
-  Little,
-  Big
-}
-```
-
-### Utility Functions
-
-- `uint8ArrayFromBufferSource(bufferSource: BufferSource): Uint8Array` - Convert BufferSource to Uint8Array
-- `toBase64(data: BufferSource): string` - Convert binary data to base64 string
-
 ## TODO
 
 - [ ] Publish package to npmjs
