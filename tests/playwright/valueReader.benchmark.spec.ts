@@ -2,7 +2,7 @@
 import { test, expect } from "@playwright/test";
 import BitOpsValueReader from "../../src/value-readers/BitOpsValueReader";
 import DataViewValueReader from "../../src/value-readers/DataViewValueReader";
-import { PerformanceValueReader } from "../../src/value-readers/PerformanceValueReader";
+import PerformanceValueReader from "../../src/value-readers/PerformanceValueReader";
 import { Endian } from "../../src/shared";
 
 test("ValueReader performance comparison", async () => {
